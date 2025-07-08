@@ -1,0 +1,148 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions",
+  "type": "object",
+  "properties": {
+    "datatype": {
+      "type": "string"
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Datum"
+      }
+    },
+    "layout": {
+      "$ref": "#/definitions/Layout"
+    }
+  },
+  "definitions": {
+    "Datum": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "uid": {
+          "type": "string"
+        },
+        "comments": {
+          "type": "string"
+        },
+        "line": {
+          "$ref": "#/definitions/Line"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "x": {
+          "type": "array",
+          "items": {}
+        },
+        "y": {
+          "type": "array",
+          "items": {}
+        }
+      },
+      "required": ["name", "type", "x", "y"]
+    },
+    "Layout": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "title": {
+          "type": "object",
+          "properties": {
+            "text": { "type": "string" }
+          },
+          "required": ["text"]
+        },
+        "xaxis": {
+          "$ref": "#/definitions/Xaxis"
+        },
+        "yaxis": {
+          "$ref": "#/definitions/Yaxis"
+        },
+        "legend": {
+          "$ref": "#/definitions/Legend"
+        },
+        "autosize": {
+          "type": "boolean"
+        },
+        "plot_bgcolor": {
+          "type": "string"
+        },
+        "paper_bgcolor": {
+          "type": "string"
+        }
+      },
+      "required": ["title", "xaxis", "yaxis"]
+    },
+    "Line": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "shape": {
+          "type": "string"
+        },
+        "width": {
+          "type": "integer"
+        }
+      }
+    },
+    "Legend": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "Xaxis": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "title": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": ["text"]
+        },
+        "showgrid": {
+          "type": "boolean"
+        },
+        "autorange": {
+          "type": "boolean"
+        }
+      },
+      "required": ["title"]
+    },
+    "Yaxis": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "title": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": ["text"]
+        },
+        "autorange": {
+          "type": "boolean"
+        },
+        "gridcolor": {
+          "type": "string"
+        },
+        "ticksuffix": {
+          "type": "string"
+        }
+      },
+      "required": ["title"]
+    }
+  },
+  "required": ["datatype", "data", "layout"],
+  "additionalProperties": true
+}
