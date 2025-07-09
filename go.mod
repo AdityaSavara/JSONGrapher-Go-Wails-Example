@@ -33,4 +33,4 @@ require (
 	golang.org/x/text v0.22.0 // indirect
 )
 
-// replace github.com/wailsapp/wails/v2 v2.10.1 => C:\Users\Yurik\go\pkg\mod
+replace github.com/AdityaSavara/jsongrapher-go v0.0.0 => /jsongrapher-go
