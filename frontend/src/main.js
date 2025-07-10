@@ -13,22 +13,24 @@ document.querySelector('#app').innerHTML = ``;
 //First read in a file, using Go to demonstrate receiving the json from GO.
 let providedJson1 = await GetJSONFromFile("./json_records/SrTiO3_rainbow.json")
 let providedJson2 = await GetJSONFromFile("./json_records/SrTiO3_rainbow.json")
-//console.log("The providedJson received by main.js", providedJson1)
 
-// Create div element for the graphs. This isn't necessary but will be convenient.
-const allGraphsOuterDiv = document.createElement('div');
-allGraphsOuterDiv.innerHTML = `
+// Create a div element for the graph.
+// An separate outer div is required for each graph.
+const upperGraphOuterDiv = document.createElement('div');
+upperGraphOuterDiv.innerHTML = `
   <center>
     <h2>This is a simple JSONGrapher Wails App to Demonstrate Showing Graphs from JSON</h2>
     <div id="graphDivGraph2"></div>
     <div id="errorMessagesDivGraph2"></div>
-    Click on 'Change Graph' to switch between graphs. <button class="btn" onclick="changeGraph()">Change Graph</button> 
+    Click on 'Change Graph' to switch between graphs.
+	<button class="btn" onclick="changeGraph()">Change Graph</button> 
+	<button class="btn" onclick="clearUpperGraph()">Clear Upper Graph</button> 
   </center>
 `;
 //I did consider using this as well:   <button class="btn" onclick="clearData(graphDivGraph2)">Clear Graph</button>
 
 // Append to desired location in the DOM
-document.querySelector('#app').appendChild(allGraphsOuterDiv);
+document.querySelector('#app').appendChild(upperGraphOuterDiv);
 
 //call mergeAndplotData. requires getting some arguments ready, first, as these are the args:
 //    mergeAndplotData(existingFigDict, newFigDict, newFigDictFileName, graphDivName, messagesToUserDiv, errorDiv)
@@ -47,7 +49,7 @@ async function changeGraph(){
   if (currentGraphDataSource === "SrTiO3_rainbow.json"){
     //change to the other graph, start with clearing.
 	//clearing a graph just requires passing in its Div and optionally the document it is in.
-	clearData(graphDivGraph2, document);
+	await clearData(graphDivGraph2, document);
     //now load the other graph. Though we don't need to read file in again... we will, since we are 
     // trying to create behavior of when a new json will come from Go, and this does that.
     providedJson2 = await GetJSONFromFile("./json_records/DRIFTS_CO_Adsorption_onAu22_offset2d.json");
@@ -56,7 +58,7 @@ async function changeGraph(){
   } else if (currentGraphDataSource === "DRIFTS_CO_Adsorption_onAu22_offset2d.json"){
     //change to the other graph, start with clearing.
     //clearing a graph just requires passing in its Div and optionally the document it is in.
-	clearData(graphDivGraph2, document);
+	await clearData(graphDivGraph2, document);
 	//now load the other graph. Though we don't need to read file in again... we will, since we are 
     // trying to create behavior of when a new json will come from Go, and this does that.
     providedJson1 = await GetJSONFromFile("./json_records/SrTiO3_rainbow.json");
@@ -66,8 +68,15 @@ async function changeGraph(){
 
 }
 
+
+async function clearUpperGraph(){
+	//clearing a graph just requires passing in its Div and optionally the document it is in.
+	await clearData(graphDivGraph2, document);
+
+};
 //Add the new function to the window so that the changeGraph button can access it.
 window.changeGraph = changeGraph;
+window.clearUpperGraph = clearUpperGraph;
 
 
 //////Start of block of code for upper JSONGrapher example which changes graphs with button click. 
@@ -76,8 +85,10 @@ window.changeGraph = changeGraph;
 //////Start of block of code for lower JSONGrapher example 
 // which involves populating the individual JSONGrapher fields
 
-//We have an existing outerDiv which we will add to.
-allGraphsOuterDiv.innerHTML += `
+// Create a div element for the graph.
+// An separate outer div is required for each graph.
+const lowerGraphOuterDiv = document.createElement('div');
+lowerGraphOuterDiv.innerHTML = `
   <center>
     <h2>This is a simple JSONGrapher Wails App to Demonstrate Showing Graphs from JSON</h2>
     <div id="graphDivGraph3"></div>
@@ -87,6 +98,10 @@ allGraphsOuterDiv.innerHTML += `
 	<button class="btn" onclick="clearLowerGraph()">Clear Lower Graph</button> 
   </center>
 `;
+
+
+// Append to desired location in the DOM
+document.querySelector('#app').appendChild(lowerGraphOuterDiv);
 
 
 //This time, instead of making variables directly in main.js, we'll make them inside the createLowerGraph function.
@@ -101,15 +116,16 @@ async function createLowerGraph(){
 
 	//let's plot a graph. We'll provide null for the filename.
 	let mergedFigDict = await mergeAndplotData(null, graph3JSON, null, graphDivGraph3, messagesToUserDiv, errorMessagesDivGraph3);	
-}
+};
 
 async function clearLowerGraph(){
 	//clearing a graph just requires passing in its Div and optionally the document it is in.
 	clearData(graphDivGraph3, document);
-}
+};
 
 
 //Add the new functions to the window so that the changeGraph button can access it.
 window.createLowerGraph = createLowerGraph;
 window.clearLowerGraph = clearLowerGraph;
 
+//////End of block of code for lower JSONGrapher example 
