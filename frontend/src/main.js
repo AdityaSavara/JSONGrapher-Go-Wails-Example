@@ -19,7 +19,7 @@ let providedJson2 = await GetJSONFromFile("./json_records/SrTiO3_rainbow.json")
 const upperGraphOuterDiv = document.createElement('div');
 upperGraphOuterDiv.innerHTML = `
   <center>
-    <h2>This is a simple JSONGrapher Wails App to Demonstrate Showing Graphs from JSON</h2>
+    <h2><font color='black'>This is a simple JSONGrapher Wails App to Demonstrate Showing Graphs from JSON</font></h2>
     <div id="graphDivGraph2"></div>
     <div id="errorMessagesDivGraph2"></div>
     Click on 'Change Graph' to switch between graphs.
@@ -90,7 +90,7 @@ window.clearUpperGraph = clearUpperGraph;
 const lowerGraphOuterDiv = document.createElement('div');
 lowerGraphOuterDiv.innerHTML = `
   <center>
-    <h2>This is a simple JSONGrapher Wails App to Demonstrate Showing Graphs from JSON</h2>
+    <h2><font color='black'>This is a simple JSONGrapher Wails App to Demonstrate Showing Graphs from JSON</font></h2>
     <div id="graphDivGraph3"></div>
     <div id="errorMessagesDivGraph3"></div>
     Click on 'Create Lower Graph' to create an additional graph, and 'Clear Lower Graph' to remove it. 
