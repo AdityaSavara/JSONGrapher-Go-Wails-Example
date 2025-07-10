@@ -31,6 +31,8 @@ func (a *App) Greet(name string) string {
 	return fmt.Sprintf("Hello %s, It's show time!", name)
 }
 
+
+//This function gets a JSON record from a file, for pre-existing records.
 func (a *App) GetJSONFromFile(filename string) (interface{}, error) {
 	file, err := os.Open(filename)
 	if err != nil {
@@ -52,16 +54,13 @@ func (a *App) GetJSONFromFile(filename string) (interface{}, error) {
 }
 
 
+
+//This function shows an example of how to create a JSONGrapherRecord.
+//In practice, one would typically get xValues and yValues from a program
+// rather than hardcoding them or loading them from file. 
 func (a *App) CreateExampleJSON() (interface{}, error) {
-	record := jgr.CreateNewJSONGrapherRecord()
 
-	record.SetComments("CH4 Activation over Perovskite Catalysts")
-	record.SetDatatype("CO2_Adsorption___Differential_Enthalpy")
-
-	record.Layout.Title.Text = "CO2 Differential Enthalpy of Adsorption"
-	record.SetXAxisLabelIncludingUnits("Quantity Adsorbed (µmol*m^(-2))")
-	record.SetYAxisLabelIncludingUnits("Adsorption_Enthalpy (kJ*mol**(-1))")
-
+	//Typically, user would have code here to generate the xValues and yValues.
 	xValues := []interface{}{
 		nil, 0.167, 0.33496, 0.50598, 0.67361, 0.84123, 1.00652, 1.17088, 1.33617, 1.49799,
 		1.65619, 1.81733, 1.97414, 2.13134, 2.2892, 2.44419, 2.5978, 2.75083, 2.90336,
@@ -81,6 +80,16 @@ func (a *App) CreateExampleJSON() (interface{}, error) {
 		12.38018, 10.94238, 15.22293, 4.3628, 6.23571, 6.96898, 12.52826, 18.08212,
 		22.37963, 25.72857, 18.84665,
 	}
+
+
+
+	record := jgr.CreateNewJSONGrapherRecord()
+	record.SetComments("CH4 Activation over Perovskite Catalysts")
+	record.SetDatatype("CO2_Adsorption___Differential_Enthalpy")
+
+	record.Layout.Title.Text = "CO2 Differential Enthalpy of Adsorption"
+	record.SetXAxisLabelIncludingUnits("Quantity Adsorbed (µmol*m^(-2))")
+	record.SetYAxisLabelIncludingUnits("Adsorption_Enthalpy (kJ*mol**(-1))")
 
 	dataSeries := jgr.JSONGrapherDataSeries{
 		Name:       "LaFeO3",
