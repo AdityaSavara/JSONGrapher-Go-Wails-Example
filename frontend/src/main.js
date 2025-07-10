@@ -90,7 +90,7 @@ window.clearUpperGraph = clearUpperGraph;
 const lowerGraphOuterDiv = document.createElement('div');
 lowerGraphOuterDiv.innerHTML = `
   <center>
-    <h2><font color='black'>This is a simple JSONGrapher Wails App to Demonstrate Showing Graphs from JSON</font></h2>
+    <h2><font color='black'>Click on the various buttons to proceed with the demonstration.<br> You can also zoom by mouse and hover over individual points.</font></h2>
     <div id="graphDivGraph3"></div>
     <div id="errorMessagesDivGraph3"></div>
     Click on 'Create Lower Graph' to create an additional graph, and 'Clear Lower Graph' to remove it. 
