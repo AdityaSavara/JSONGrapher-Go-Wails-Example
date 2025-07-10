@@ -47,21 +47,21 @@ async function changeGraph(){
   if (currentGraphDataSource === "SrTiO3_rainbow.json"){
     //change to the other graph, start with clearing.
 	//clearing a graph just requires passing in its Div and optionally the document it is in.
-	clearData(graphDivGraph2, document)
+	clearData(graphDivGraph2, document);
     //now load the other graph. Though we don't need to read file in again... we will, since we are 
     // trying to create behavior of when a new json will come from Go, and this does that.
-    providedJson2 = await GetJSONFromFile("./json_records/DRIFTS_CO_Adsorption_onAu22_offset2d.json")
+    providedJson2 = await GetJSONFromFile("./json_records/DRIFTS_CO_Adsorption_onAu22_offset2d.json");
     mergedFigDict = await mergeAndplotData(null, providedJson2, "DRIFTS_CO_Adsorption_onAu22_offset2d.json", graphDivGraph2, messagesToUserDiv, errorMessagesDivGraph2);
-    currentGraphDataSource = "DRIFTS_CO_Adsorption_onAu22_offset2d.json"     //update the currentGraphDataSource variable, which is just a name.
+    currentGraphDataSource = "DRIFTS_CO_Adsorption_onAu22_offset2d.json";     //update the currentGraphDataSource variable, which is just a name.
   } else if (currentGraphDataSource === "DRIFTS_CO_Adsorption_onAu22_offset2d.json"){
     //change to the other graph, start with clearing.
     //clearing a graph just requires passing in its Div and optionally the document it is in.
-	clearData(graphDivGraph2, document)
+	clearData(graphDivGraph2, document);
 	//now load the other graph. Though we don't need to read file in again... we will, since we are 
     // trying to create behavior of when a new json will come from Go, and this does that.
-    providedJson1 = await GetJSONFromFile("./json_records/SrTiO3_rainbow.json")
+    providedJson1 = await GetJSONFromFile("./json_records/SrTiO3_rainbow.json");
     mergedFigDict = await mergeAndplotData(null, providedJson1, "SrTiO3_rainbow.json", graphDivGraph2, messagesToUserDiv, errorMessagesDivGraph2);
-    currentGraphDataSource = "SrTiO3_rainbow.json"     //update the currentGraphDataSource variable
+    currentGraphDataSource = "SrTiO3_rainbow.json";     //update the currentGraphDataSource variable
   }
 
 }
