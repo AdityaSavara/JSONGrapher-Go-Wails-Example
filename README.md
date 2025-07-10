@@ -28,7 +28,11 @@ A developer would implement all of the above things in their app, mimicking what
 
 Additional details to know for development:
 - It was needed to copy the JSONGrapher source code into ./frontend/JSONGrapher 
-- Only two JSONGrapher directores, 'src' and 'styles' needed to be pasted in, from https://github.com/AdityaSavara/JSONGrapher
+- Only two JSONGrapher javascript directores, 'src' and 'styles' are needed
+- the javascript directores are originally from https://github.com/AdityaSavara/JSONGrapher
+- The jsongrapher-go directory enables the Go based JSONGrapher record creation,
+- and the go.mod file has been filled in to use the local version of jsongrapher-go
+-  (however, a person can retrieve the most up to date version of jsongrapher-go if desired).
 - It is not necessary, or even recommended, to use GetJSONFromFile, under normal circumstances.
 - The .json files were for demonstration purposes, here. Normally, your code would generate and send JSON
 - directly to Wails upon request, in a JSONGrapher compatible format (more similar to the CreateExampleJSON function).
@@ -36,6 +40,7 @@ Additional details to know for development:
 - in part because JSONGrapher is easiest to use on a page (or frame) with a white background.
 - The JSONGrapher directories include third party open source software, as noted in LICENSE.txt and NOTICE.txt
 - Use of JSONGrapher in your Wails app, like this, will require including the licenses with your source code.
+
 
 ## Project Config
 
