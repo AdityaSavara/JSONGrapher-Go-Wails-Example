@@ -4,6 +4,7 @@
       import {mergeAndplotData, prepareForPlotting} from './plottingUtils.js'
       import { loadLibrary } from './loadingUtils.js';
       import {Convert} from './UUC/app/convert.js';
+      import { getConfig } from './config.js';
       export {mergeAndplotData} //make this function available more widely.
       
       //start of block to get Plotly ready.
@@ -180,24 +181,27 @@ export function clearData(graphDivName, domDoc = document) {
 
 
       ///############################ BELOW IS THE MAIN BLOCK OF CODE FOR JSON GRAPHER ##################################
-      if (urlParamsString) {
-        //This waiting of the DOM to be loaded line is because the "isValidURL" and other functions need to load from the modules.
-        //After the main block of code is also moved to a module, perhaps this could be changed.
-        //More likely, those functions should stay in this file, while the main function should be moved into a module.
-        //That way, an external json can be called and downloaded even before the DOM is finished loading.
-        document.addEventListener('DOMContentLoaded', () => {
-          //I have hardcoded this event listener to plot to the Graph1 div.
-          //It is also hardcoded to pass in the globalFigDict.
-          loadFromUrlParams(globalFigDict, urlParamsString, "graph1", errorDiv);
-          //This function needs to toggle the reveal/hide blocks directly, since it is like an independent event listener.
-          const toggleSection1 = document.getElementById("toggleSection2");
-          const toggleSection2 = document.getElementById("toggleSection2");
-          const toRevealSection = document.getElementById("toReveal"); //get toReveal section so actions can reveal
-          toggleSection1.style.display = "none"; // "none" to hide and "block" to show. Those are built in keywords.
-          toggleSection2.style.display = "none"; // "none" to hide and "block" to show. Those are built in keywords.
-          toRevealSection.style.display = "block"; // "none" to hide and "block" to show. Those are built in keywords.
-        });
-      };
+
+      // This function wraps the logic that previously relied on DOMContentLoaded.
+      export async function loadFromUrlParamsProcedureWrapper(
+                                                  urlParamsString,
+                                                  messagesToUserDiv,
+                                                  errorDiv){
+        // I have hardcoded this event listener to plot to the Graph1 div.
+        // It is also hardcoded to pass in the globalFigDict.
+        await loadFromUrlParams(globalFigDict, urlParamsString, "graph1", messagesToUserDiv, errorDiv);
+
+        // This function needs to toggle the reveal/hide blocks directly, since it is like an independent event listener.
+        const toggleSection1 = document.getElementById("toggleSection1"); 
+        const toggleSection2 = document.getElementById("toggleSection2");
+        const toRevealSection = document.getElementById("toReveal"); // Get toReveal section so actions can reveal.
+
+        // "none" to hide and "block" to show — those are built-in keywords.
+        toggleSection1.style.display = "none";
+        toggleSection2.style.display = "none";
+        toRevealSection.style.display = "block";
+      }
+
       
       //callbackForPlotting is a function that gets passed in.
       // When a new figDict is passed, in, the callBack does things like the merging and plotting, and returns the revised globalFigDict.
@@ -215,8 +219,17 @@ export function clearData(graphDivName, domDoc = document) {
             const fileSelector = document.getElementById("file-selector");
             if (fileSelector) {
               fileSelector.addEventListener("change", async (event) => {
+                //Passing the actual event object forward was causing problems (it was emptying downstream).
+                //However, creating a javascript object with the expected structure
+                //and calling it a 'clonedEvent' fixed the problem.
+                // The idea of a 'clonedEvent' to solve the issue was actually an idea by copilot, though copilot didn't understand why passing the event
+                // was resulting it becoming emptied downstream.
                 const file = event.target.files[0]; //this is a local temporary variable.
                 const fileName = file.name; //this is a local temporary variable
+                const clonedEvent = {
+                  target: { files: [file] },
+                  dataTransfer: { files: [file] }
+                };                
                 if (
                   fileName !== "Example1_JSONGrapher.json" &&
                   fileName !== "Example2_JSONGrapher.json" &&
@@ -228,7 +241,7 @@ export function clearData(graphDivName, domDoc = document) {
                 };
                 let urlReceived
                 //These callbacks are hardcoded to use the globalFigDict.
-                [globalFigDict, urlReceived] = await callbackForMergingAndPlotting(globalFigDict, event, "change", graphDivName, messagesToUserDiv, errorDiv);
+                [globalFigDict, urlReceived] = await callbackForMergingAndPlotting(globalFigDict, clonedEvent, "change", graphDivName, messagesToUserDiv, errorDiv);
                 // STEP 6: Provide file with converted units for download as JSON and CSV by buttons
                 //should  make an if statement here to give newestFigDict with filename if only one record has been uploaded
                 // and to otherwise give the full data with name like "mergedGraphRecord.json" for the filename.
@@ -246,8 +259,17 @@ export function clearData(graphDivName, domDoc = document) {
               });
               dropArea.addEventListener("drop", async (event) => {
                 event.preventDefault();
+                //Passing the actual event object forward was causing problems (it was emptying downstream).
+                //However, creating a javascript object with the expected structure
+                //and calling it a 'clonedEvent' fixed the problem.
+                // The idea of a 'clonedEvent' to solve the issue was actually an idea by copilot, though copilot didn't understand why passing the event
+                // was resulting it becoming emptied downstream.
                 const file = event.dataTransfer.files[0]; //this is a local temporary variable
                 const fileName = file.name; //this is a local temporary variable
+                const clonedEvent = {
+                  target: { files: [file] },
+                  dataTransfer: { files: [file] }
+                };                
                 if (
                   fileName !== "Example1_JSONGrapher.json" &&
                   fileName !== "Example2_JSONGrapher.json" &&
@@ -259,7 +281,7 @@ export function clearData(graphDivName, domDoc = document) {
                 };
                 let urlReceived
                 //These callbacks are hardcoded to use the globalFigDict.
-                [globalFigDict, urlReceived] = await callbackForMergingAndPlotting(globalFigDict, event, "drop", graphDivName, messagesToUserDiv, errorDiv);
+                [globalFigDict, urlReceived] = await callbackForMergingAndPlotting(globalFigDict, clonedEvent, "drop", graphDivName, messagesToUserDiv, errorDiv);
                 // STEP 6: Provide file with converted units for download as JSON and CSV by buttons
                 //should  make an if statement here to give newestFigDict with filename if only one record has been uploaded
                 // and to otherwise give the full data with name like "mergedGraphRecord.json" for the filename.
@@ -303,11 +325,11 @@ export function clearData(graphDivName, domDoc = document) {
 
       //This loads from url params. Url params are variables in the url after a "?", for example:
       // http://www.jsongrapher.com?fromUrl=https%3A%2F%2Fraw.githubusercontent.com%2FAdityaSavara%2FJSONGrapherExamples%2Fmain%2FExampleDataRecords%2F9-3DArrhenius%2FRate_Constant_scatter3d.json
-      async function loadFromUrlParams(existingFigDict, urlInput, graphDivName, errorDiv){
+      async function loadFromUrlParams(existingFigDict, urlInput, graphDivName, messagesToUserDiv, errorDiv){
         if (isValidUrl(urlInput)){ 
           const url = parseUrl(urlInput);
           let urlReceived
-          [globalFigDict, urlReceived] = await loadMergeAndPlotData(existingFigDict, url, "url", graphDivName, errorDiv);
+          [globalFigDict, urlReceived] = await loadMergeAndPlotData(existingFigDict, url, "url", graphDivName, messagesToUserDiv, errorDiv);
           // STEP 6: Provide file with converted units for download as JSON and CSV by buttons
           //should  make an if statement here to give newestFigDict with filename if only one record has been uploaded
           // and to otherwise give the full data with name like "mergedGraphRecord.json" for the filename.
