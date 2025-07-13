@@ -45,7 +45,7 @@ const messagesToUserDiv = "This is a message for the user upon loading.";
 //let's plot a graph. The path used will be relative to main.go. The string below is the graph filename and does not load it again.
 let mergedFigDict = await mergeAndplotData(null, providedJson1, "SrTiO3_rainbow.json", graphDivGraph2, messagesToUserDiv, errorMessagesDivGraph2);
 let currentUpperGraphDataSource = "SrTiO3_rainbow.json";
-let currentUpperGraphJson 
+let currentUpperGraphJson = providedJson1 //This is the initial json.
 
 //We'll make a little function to switch between graphs, then populate the window with it.
 //This function will utilize this module's 'currentGraphDataSource' variable to know which graph is currently up.
@@ -86,7 +86,8 @@ async function downloadUpperGraphJSON(){
   let downloadButton = document.getElementById("downloadUpperGraphJSON-btn");    
   const filename ="upperGraph.json"
   const downloadLink = createDownloadJSONLink(currentUpperGraphJson, filename);
-  downloadButton = addOpeningURLonButtonClick (downloadButton, downloadLink)
+  window.open(downloadLink, "_blank");
+  //downloadButton = addOpeningURLonButtonClick (downloadButton, downloadLink)
 }
 
 async function downloadUpperGraphCSV(){
@@ -95,7 +96,8 @@ async function downloadUpperGraphCSV(){
   const csvContent = createCSV(currentUpperGraphJson);
   const filename = "upperGraph.csv"
   const downloadLink = createDownloadCSVLink(csvContent.csv, filename);  
-  downloadButton = addOpeningURLonButtonClick (downloadButton, downloadLink)
+  window.open(downloadLink, "_blank");
+  //downloadButton = addOpeningURLonButtonClick (downloadButton, downloadLink)
 }
 
 
