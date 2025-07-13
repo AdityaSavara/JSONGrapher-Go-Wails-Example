@@ -79,15 +79,14 @@ async function changeGraph(){
 async function clearUpperGraph(){
 	//clearing a graph just requires passing in its Div and optionally the document it is in.
 	await clearData(graphDivGraph2, document);
+  currentUpperGraphJson = null //clearing this to avoid unexpected data download between graphs.
 };
 
 
 async function downloadUpperGraphJSON(){
-  let downloadButton = document.getElementById("downloadUpperGraphJSON-btn");    
   const filename ="upperGraph.json"
   const downloadLink = createDownloadJSONLink(currentUpperGraphJson, filename);
-  window.open(downloadLink, "_blank");
-  //downloadButton = addOpeningURLonButtonClick (downloadButton, downloadLink)
+  downloadLink.click(); //The user clicked a button. This 'clicks' an invisible download link for the user.
 }
 
 async function downloadUpperGraphCSV(){
@@ -96,8 +95,7 @@ async function downloadUpperGraphCSV(){
   const csvContent = createCSV(currentUpperGraphJson);
   const filename = "upperGraph.csv"
   const downloadLink = createDownloadCSVLink(csvContent.csv, filename);  
-  window.open(downloadLink, "_blank");
-  //downloadButton = addOpeningURLonButtonClick (downloadButton, downloadLink)
+  downloadLink.click();  //The user clicked a button. This 'clicks' an invisible download link for the user.
 }
 
 
@@ -152,11 +150,43 @@ async function createLowerGraph(){
 async function clearLowerGraph(){
 	//clearing a graph just requires passing in its Div and optionally the document it is in.
 	clearData(graphDivGraph3, document);
+  currentLowerGraphJson = null //clearing this to avoid unexpected data download between graphs.
 };
+
+async function downloadLowerGraphJSON() {
+  const filename = "lowerGraph.json";
+  const downloadLink = createDownloadJSONLink(currentLowerGraphJson, filename);
+  downloadLink.click(); // Simulates user click to trigger download
+}
+
+async function downloadLowerGraphCSV() {
+  const filename = "lowerGraph.csv";
+  const csvContent = createCSV(currentLowerGraphJson);
+  const downloadLink = createDownloadCSVLink(csvContent.csv, filename);
+  downloadLink.click(); // Simulates user click to trigger download
+}
+
+
+// Function for downloading the JSON data from the lower graph.
+async function downloadLowerGraphJSON(){
+  const filename = "lowerGraph.json";
+  const downloadLink = createDownloadJSONLink(currentLowerGraphJson, filename);
+  downloadLink.click(); //The user clicked a button. This 'clicks' an invisible download link for the user.
+}
+
+// Function for downloading the CSV data from the lower graph.
+// The csv String is in csvContent.csv
+async function downloadLowerGraphCSV(){
+  const filename = "lowerGraph.csv";
+  const csvContent = createCSV(currentLowerGraphJson);
+  const downloadLink = createDownloadCSVLink(csvContent.csv, filename);  
+  downloadLink.click();  //The user clicked a button. This 'clicks' an invisible download link for the user.
+}
 
 
 //Add the new functions to the window so that the changeGraph button can access it.
 window.createLowerGraph = createLowerGraph;
 window.clearLowerGraph = clearLowerGraph;
-
+window.downloadLowerGraphCSV = downloadLowerGraphCSV;
+window.downloadLowerGraphJSON = downloadLowerGraphJSON;
 //////End of block of code for lower JSONGrapher example 
