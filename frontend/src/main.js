@@ -153,20 +153,6 @@ async function clearLowerGraph(){
   currentLowerGraphJson = null //clearing this to avoid unexpected data download between graphs.
 };
 
-async function downloadLowerGraphJSON() {
-  const filename = "lowerGraph.json";
-  const downloadLink = createDownloadJSONLink(currentLowerGraphJson, filename);
-  downloadLink.click(); // Simulates user click to trigger download
-}
-
-async function downloadLowerGraphCSV() {
-  const filename = "lowerGraph.csv";
-  const csvContent = createCSV(currentLowerGraphJson);
-  const downloadLink = createDownloadCSVLink(csvContent.csv, filename);
-  downloadLink.click(); // Simulates user click to trigger download
-}
-
-
 // Function for downloading the JSON data from the lower graph.
 async function downloadLowerGraphJSON(){
   const filename = "lowerGraph.json";
